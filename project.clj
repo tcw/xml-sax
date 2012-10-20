@@ -7,4 +7,5 @@
                  [org.clojure/core.match "0.2.0-alpha11"]
                  [speclj "2.1.2"]]
   :plugins [[speclj "2.1.2"]]
-  :test-paths ["spec/"])
+  :test-paths ["spec/"]
+  :resource-paths ["dev_resources"])

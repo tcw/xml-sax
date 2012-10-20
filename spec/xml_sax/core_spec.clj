@@ -18,22 +18,27 @@
 
   (it "should handle one tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "shit.xml" "other" (fn [elem] (swap! counter inc)))
+      (pull-xml "company.xml" "other" (fn [elem] (swap! counter inc) (println elem)))
       (should= 1 @counter)))
 
   (it "should handle two tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "shit.xml" "company/staff" (fn [elem] (swap! counter inc)))
+      (pull-xml "company.xml" "company/staff" (fn [elem] (swap! counter inc) (println elem)))
       (should= 2 @counter)))
 
   (it "should handle three tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "shit.xml" "company/staff/firstname" (fn [elem] (swap! counter inc)))
+      (pull-xml "company.xml" "company/staff/firstname" (fn [elem] (swap! counter inc) (println elem)))
+      (should= 2 @counter)))
+
+  (it "should handle partial tag search with match"
+    (let [counter (atom 0)]
+      (pull-xml "company.xml" "staff/firstname" (fn [elem] (swap! counter inc) (println elem)))
       (should= 2 @counter)))
 
   (it "should handle one tag search no match"
     (let [counter (atom 0)]
-      (pull-xml "shit.xml" "compan" (fn [elem] (swap! counter inc)))
+      (pull-xml "company.xml" "compan" (fn [elem] (swap! counter inc)))
       (should= 0 @counter)))
   )
 
