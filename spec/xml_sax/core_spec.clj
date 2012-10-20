@@ -11,15 +11,30 @@
   (let [st (String. ch start length)]
     (when (seq (.trim st)))))
 
+;      (pull-xml "/home/tom/XML/standard.xml" "regions" (fn [elem] (swap! counter inc)))
 
 (describe "Sax parse xml"
 
-  (it "parses xml with sax in a xpath forward manor"
+
+  (it "should handle one tag search with match"
     (let [counter (atom 0)]
-;      (pull-xml "shit.xml" "staff" (fn [elem] (swap! counter inc)))
-      (pull-xml "/home/tom/XML/standard.xml" "site/regions/africa" (fn [elem]
-                                                      (swap! counter inc)))
-       (should= 21750 @counter)))
+      (pull-xml "shit.xml" "other" (fn [elem] (swap! counter inc)))
+      (should= 1 @counter)))
+
+  (it "should handle two tag search with match"
+    (let [counter (atom 0)]
+      (pull-xml "shit.xml" "company/staff" (fn [elem] (swap! counter inc)))
+      (should= 2 @counter)))
+
+  (it "should handle three tag search with match"
+    (let [counter (atom 0)]
+      (pull-xml "shit.xml" "company/staff/firstname" (fn [elem] (swap! counter inc)))
+      (should= 2 @counter)))
+
+  (it "should handle one tag search no match"
+    (let [counter (atom 0)]
+      (pull-xml "shit.xml" "compan" (fn [elem] (swap! counter inc)))
+      (should= 0 @counter)))
   )
 
 (run-specs)
