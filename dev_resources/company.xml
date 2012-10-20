@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <company>
-    <staff id="12345">
+    <staff id="12345" class="href">
         <firstname>per</firstname>
         <lastname>ola ola</lastname>
         <nickname>pero</nickname>

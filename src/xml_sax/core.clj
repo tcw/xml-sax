@@ -7,19 +7,23 @@
            (java.io Reader)))
 
 (defn sax-parse [s sf ef cf]
-    (.. SAXParserFactory
-      newInstance
-      newSAXParser
-      (parse s (proxy [DefaultHandler] []
-                 (startElement [uri local-name q-name #^Attributes atts]
-                   (sf uri local-name q-name atts))
-                 (endElement [uri local-name q-name]
-                   (ef uri local-name q-name))
-                 (characters [ch start length]
-                   (cf ch start length))))))
+  (.. SAXParserFactory
+    newInstance
+    newSAXParser
+    (parse s (proxy [DefaultHandler] []
+               (startElement [uri local-name q-name #^Attributes atts]
+                 (sf uri local-name q-name atts))
+               (endElement [uri local-name q-name]
+                 (ef uri local-name q-name))
+               (characters [ch start length]
+                 (cf ch start length))))))
 
-(defn is-match? [path path-pos q-name]
+(defn- is-match? [path path-pos q-name]
   (= (nth path path-pos) q-name))
+
+(defn- list-attr [atts]
+  (apply str (for [i (range (.getLength atts))]
+    (str " " (.getQName atts i) "=\"" (.getValue atts i) "\""))))
 
 (defn pull-xml [source fxpath f]
   (let [path (string/split fxpath #"/")
@@ -30,11 +34,11 @@
     (sax-parse source
       (fn [uri local-name q-name #^Attributes atts]
         (if @start-elem
-          (swap! xml-elem conj (str "<" uri local-name q-name ">"))
+          (swap! xml-elem conj (str "<" uri local-name q-name (list-attr atts)">"))
           (when (is-match? path @path-pos q-name)
             (if (= @path-pos path-final)
-              (do (swap! xml-elem conj (str "<" uri local-name q-name ">"))
-              (swap! start-elem not))
+              (do (swap! xml-elem conj (str "<" uri local-name q-name (list-attr atts)">"))
+                (swap! start-elem not))
               (swap! path-pos inc))))
         ),
       (fn [uri local-name q-name]
@@ -43,7 +47,7 @@
           (if @start-elem
             (do
               (swap! start-elem not)
-              (f @xml-elem)
+               (f (apply str @xml-elem))
               (reset! xml-elem []))
             (swap! path-pos dec)))
         ),

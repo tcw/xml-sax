@@ -7,33 +7,43 @@
              [(keyword (.getQName atts i))
               (.getValue atts i)])))
 
-(defn get-string [ch start length]
-  (let [st (String. ch start length)]
-    (when (seq (.trim st)))))
-
-;      (pull-xml "/home/tom/XML/standard.xml" "regions" (fn [elem] (swap! counter inc)))
-
 (describe "Sax parse xml"
-
 
   (it "should handle one tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "company.xml" "other" (fn [elem] (swap! counter inc) (println elem)))
+      (pull-xml "/home/tom/XML/standard.xml" "item" (fn [elem] (swap! counter inc)))
+      (should= 21750 @counter)))
+
+
+;  (it "should handle one tag search with match"
+;    (let [counter (atom 0)]
+;      (pull-xml "complex.xml" "xs:schema" (fn [elem] (swap! counter inc) (println elem)))
+;      (should= 1 @counter)))
+
+
+  (it "should handle self closing tag"
+    (let [tag (atom [])]
+      (pull-xml "company.xml" "self" (fn [elem] (swap! tag conj elem)))
+      (should= (apply str @tag) "<self></self>")))
+
+  (it "should handle one tag search with match"
+    (let [counter (atom 0)]
+      (pull-xml "company.xml" "other" (fn [elem] (swap! counter inc)))
       (should= 1 @counter)))
 
   (it "should handle two tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "company.xml" "company/staff" (fn [elem] (swap! counter inc) (println elem)))
+      (pull-xml "company.xml" "company/staff" (fn [elem] (swap! counter inc)))
       (should= 2 @counter)))
 
   (it "should handle three tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "company.xml" "company/staff/firstname" (fn [elem] (swap! counter inc) (println elem)))
+      (pull-xml "company.xml" "company/staff/firstname" (fn [elem] (swap! counter inc)))
       (should= 2 @counter)))
 
   (it "should handle partial tag search with match"
     (let [counter (atom 0)]
-      (pull-xml "company.xml" "staff/firstname" (fn [elem] (swap! counter inc) (println elem)))
+      (pull-xml "company.xml" "staff/firstname" (fn [elem] (swap! counter inc)))
       (should= 2 @counter)))
 
   (it "should handle one tag search no match"
