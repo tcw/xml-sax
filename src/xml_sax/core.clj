@@ -1,4 +1,5 @@
 (ns xml-sax.core
+  (:use cheshire.core)
   (:require [clojure.string :as string]
             [clojure.java.io :as jio])
   (:import (org.xml.sax Attributes InputSource)
@@ -72,4 +73,7 @@
 (cond
   (= as :xml) (pull-xml-path source fxpath f)
   (= as :json) (pull-xml-path source fxpath (comp f (fn [s] (XML/toJSONObject s))))
+  (= as :clj-map) (pull-xml-path source fxpath (comp f
+                                                 (fn [s] (parse-string s true))
+                                                 (fn [s] (.toString (XML/toJSONObject s)))))
   :else (pull-xml-path source fxpath f)))

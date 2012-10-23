@@ -95,4 +95,24 @@
       (should= "{\"e\":{\"content\":\"text\",\"a\":\"text\"}}" (apply str @tag) )))
   )
 
+(describe "Finds matching xml element for path and converts to clojure map"
+
+  (with xml-file (from-resource "company.xml"))
+
+  (it "should handle two tag search with match"
+    (let [counter (atom 0)]
+      (-> @xml-file
+        (pull-xml "company/staff" :clj-map (fn [elem] (swap! counter inc))))
+      (should= 2 @counter)))
+
+  (it "should get firstnames"
+    (let [names (atom [])]
+      (-> @xml-file
+        (pull-xml "company/staff" :clj-map (fn [elem] (swap! names conj (:staff elem)))))
+      (should= 2 (count @names))
+      (should= "per" (:firstname (first @names)))
+      (should= "peder" (:firstname (last @names)))))
+  )
+
+
 (run-specs)
