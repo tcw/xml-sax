@@ -36,7 +36,7 @@
   (str "<" uri local-name q-name (list-attr atts)">"))
 
 
-(defn pull-xml [source fxpath f]
+(defn- pull-xml-path [source fxpath f]
   (let [path (string/split fxpath #"/")
         path-pos (atom 0)
         path-final (- (count path) 1)
@@ -68,7 +68,8 @@
             (when (not (.isEmpty s)) (swap! xml-elem conj s))
             ))))))
 
-
-
-(defn pull-xml-as-json [source fxpath f]
-(pull-xml source fxpath (comp f (fn [s] (XML/toJSONObject s)))))
+(defn pull-xml [source fxpath as f]
+(cond
+  (= as :xml) (pull-xml-path source fxpath f)
+  (= as :json) (pull-xml-path source fxpath (comp f (fn [s] (XML/toJSONObject s))))
+  :else (pull-xml-path source fxpath f)))
