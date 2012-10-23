@@ -29,12 +29,17 @@
 (defn- is-match? [path path-pos q-name]
   (= (nth path path-pos) q-name))
 
+(defn get-attrs [atts]
+  (set (for [i (range (.getLength atts))]
+         [(keyword (.getQName atts i))
+          (.getValue atts i)])))
+
 (defn- list-attr [atts]
   (apply str (for [i (range (.getLength atts))]
-    (str " " (.getQName atts i) "=\"" (.getValue atts i) "\""))))
+               (str " " (.getQName atts i) "=\"" (.getValue atts i) "\""))))
 
 (defn- tag-as-string [uri local-name q-name #^Attributes atts]
-  (str "<" uri local-name q-name (list-attr atts)">"))
+  (str "<" uri local-name q-name (list-attr atts) ">"))
 
 
 (defn- pull-xml-path [source fxpath f]
@@ -59,7 +64,7 @@
           (if @start-elem
             (do
               (swap! start-elem not)
-               (f (apply str @xml-elem))
+              (f (apply str @xml-elem))
               (reset! xml-elem []))
             (swap! path-pos dec)))
         ),
@@ -70,10 +75,10 @@
             ))))))
 
 (defn pull-xml [source fxpath as f]
-(cond
-  (= as :xml) (pull-xml-path source fxpath f)
-  (= as :json) (pull-xml-path source fxpath (comp f (fn [s] (XML/toJSONObject s))))
-  (= as :clj-map) (pull-xml-path source fxpath (comp f
-                                                 (fn [s] (parse-string s true))
-                                                 (fn [s] (.toString (XML/toJSONObject s)))))
-  :else (pull-xml-path source fxpath f)))
+  (cond
+    (= as :xml ) (pull-xml-path source fxpath f)
+    (= as :json ) (pull-xml-path source fxpath (comp f (fn [s] (XML/toJSONObject s))))
+    (= as :clj-map ) (pull-xml-path source fxpath (comp f
+                                                    (fn [s] (parse-string s true))
+                                                    (fn [s] (.toString (XML/toJSONObject s)))))
+    :else (pull-xml-path source fxpath f)))
