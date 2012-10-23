@@ -41,7 +41,6 @@
 (defn- tag-as-string [uri local-name q-name #^Attributes atts]
   (str "<" uri local-name q-name (list-attr atts) ">"))
 
-
 (defn- pull-xml-path [source fxpath f]
   (let [path (string/split fxpath #"/")
         path-pos (atom 0)
