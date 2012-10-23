@@ -4,7 +4,14 @@
   (:import (org.xml.sax Attributes InputSource)
            (org.xml.sax.helpers DefaultHandler)
            (javax.xml.parsers SAXParserFactory)
-           (java.io Reader)))
+           (java.io Reader StringReader)
+           (org.json XML)))
+
+(defn from-string [s]
+  (InputSource. (StringReader. s)))
+
+(defn from-resource [r]
+  (jio/as-file (jio/resource r)))
 
 (defn sax-parse [s sf ef cf]
   (.. SAXParserFactory
@@ -25,6 +32,10 @@
   (apply str (for [i (range (.getLength atts))]
     (str " " (.getQName atts i) "=\"" (.getValue atts i) "\""))))
 
+(defn- tag-as-string [uri local-name q-name #^Attributes atts]
+  (str "<" uri local-name q-name (list-attr atts)">"))
+
+
 (defn pull-xml [source fxpath f]
   (let [path (string/split fxpath #"/")
         path-pos (atom 0)
@@ -34,10 +45,10 @@
     (sax-parse source
       (fn [uri local-name q-name #^Attributes atts]
         (if @start-elem
-          (swap! xml-elem conj (str "<" uri local-name q-name (list-attr atts)">"))
+          (swap! xml-elem conj (tag-as-string uri local-name q-name atts))
           (when (is-match? path @path-pos q-name)
             (if (= @path-pos path-final)
-              (do (swap! xml-elem conj (str "<" uri local-name q-name (list-attr atts)">"))
+              (do (swap! xml-elem conj (tag-as-string uri local-name q-name atts))
                 (swap! start-elem not))
               (swap! path-pos inc))))
         ),
@@ -56,3 +67,8 @@
           (let [s (.trim (String. ch start length))]
             (when (not (.isEmpty s)) (swap! xml-elem conj s))
             ))))))
+
+
+
+(defn pull-xml-as-json [source fxpath f]
+(pull-xml source fxpath (comp f (fn [s] (XML/toJSONObject s)))))

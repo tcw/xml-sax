@@ -6,6 +6,7 @@
         <nickname>pero</nickname>
         <salary>100000</salary>
         <other>some other</other>
+        <self/>
     </staff>
     <staff id="98765">
         <firstname>peder</firstname>
