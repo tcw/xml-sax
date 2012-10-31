@@ -114,5 +114,46 @@
       (should= "peder" (:firstname (last @names)))))
   )
 
+(describe "Makes sure readme examples are correct"
+
+  (it "makes sure c node is selected and output is xml"
+    (let [tag (atom [])]
+      (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
+        (pull-xml "a/b/c" :xml (fn [elem] (swap! tag conj elem))))
+      (should= "<c><d>1</d><d>2</d><d>3</d><d>4</d></c>" (apply str @tag) )))
+
+  (it "makes sure d nodes are selected and output is xml"
+    (let [tag (atom [])]
+      (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
+        (pull-xml "a/b/c/d" :xml (fn [elem] (swap! tag conj elem))))
+      (should= "<d>1</d><d>2</d><d>3</d><d>4</d>" (apply str @tag) )))
+
+  (it "makes sure c node is selected and output is json"
+    (let [tag (atom [])]
+      (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
+        (pull-xml "a/b/c" :json (fn [elem] (swap! tag conj elem))))
+      (should= "{\"c\":{\"d\":[1,2,3,4]}}" (apply str @tag) )))
+
+  (it "makes sure d nodes are selected and output is json"
+    (let [tag (atom [])]
+      (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
+        (pull-xml "a/b/c/d" :json (fn [elem] (swap! tag conj elem))))
+      (should= "{\"d\":1}{\"d\":2}{\"d\":3}{\"d\":4}" (apply str @tag) )))
+
+  (it "makes sure c node is selected and output is a clojure map"
+    (let [tag (atom [])]
+      (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
+        (pull-xml "a/b/c" :clj-map (fn [elem] (swap! tag conj elem))))
+      (should= "{:c {:d [1 2 3 4]}}" (apply str @tag) )))
+
+  (it "makes sure d nodes are selected and output is a clojure map"
+    (let [tag (atom [])]
+      (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
+        (pull-xml "a/b/c/d" :clj-map (fn [elem] (swap! tag conj elem))))
+      (should= "{:d 1}{:d 2}{:d 3}{:d 4}" (apply str @tag) )))
+
+
+  )
+
 
 (run-specs)
