@@ -4,6 +4,8 @@ A Clojure distillation of the java xml sax parser library.
 The main goal of this library is to simplifying xml sax parsing.
 The library provides an element matcher for easy selection of elements.
 
+This library is in alpha state!
+
 #Install
 
 Add to dependencies
@@ -56,12 +58,12 @@ In other words it select the elements matching the element path signature.
 There are also two convenience functions for reading xml sources:
 
     (-> (from-string "<a>hello</a>")
-            (pull-xml "a" :xml (fn [elem] (println elem))))
+          (pull-xml "a" :xml (fn [elem] (println elem))))
 
 and
 
-     (-> (from-resource "some-resource-on-classpath.xml")
-            (pull-xml "a" :xml (fn [elem] (println elem))))
+    (-> (from-resource "some-resource-on-classpath.xml")
+          (pull-xml "a" :xml (fn [elem] (println elem))))
 
 
 #examples
@@ -133,3 +135,7 @@ output:
     {:d 2}
     {:d 3}
     {:d 4}
+
+#License
+
+Distributed under the Eclipse Public License, the same as Clojure.
