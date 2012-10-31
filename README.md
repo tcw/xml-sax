@@ -79,6 +79,8 @@ file: /home/user/xml/my.xml
       </b>
     </a>
 
+function:
+
     (pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn [elem] (println elem)))
 
 output:
@@ -94,11 +96,15 @@ output:
     <d>3</d>
     <d>4</d>
 
+function:
+
     (pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn [elem] (println elem)))
 
 output:
 
     {"c":{"d":[1,2,3,4]}}
+
+function:
 
     (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn [elem] (println elem)))
 
@@ -109,12 +115,15 @@ output:
     {"d":3}
     {"d":4}
 
+function:
 
     (pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn [elem] (println elem)))
 
 output:
 
     {:c {:d [1 2 3 4]}}
+
+function:
 
     (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn [elem] (println elem)))
 
