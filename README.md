@@ -8,7 +8,7 @@ The library provides an element matcher for easy selection of elements.
 
 Add to dependencies
 
-    \[xml-sax 0.1\]
+    [xml-sax 0.1]
 
 #Usage
 
@@ -87,13 +87,13 @@ output:
     <d>3</d>
     <d>4</d>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn [node] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn \[node\] (println node)))
 
 output:
 
     {"c":{"d":[1,2,3,4]}}
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn [node] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn \[node\] (println node)))
 
 output:
 
@@ -103,13 +103,13 @@ output:
     {"d":4}
 
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn [node] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn \[node\] (println node)))
 
 output:
 
     {:c {:d [1 2 3 4]}}
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn [node] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn \[node\] (println node)))
 
 output:
 
