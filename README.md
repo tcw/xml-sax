@@ -18,7 +18,7 @@ add to ns:
 
 usage:
 
-    (pull-xml <source> <node-path> <output-format> <callback-function>)
+    (pull-xml <source> <element-path> <output-format> <callback-function>)
 
 The element matcher does not match like xpath!
 
@@ -35,26 +35,33 @@ Let say we have the xml
       <d>4</d>
     </a>
 
-Then node-path
+Then element-path
 
-    "a" selects node a and its content (all of the xml)
+    "a" selects element a and its content (all of the xml)
 
-    "a/b" selects node b and its content
+    "a/b" selects element b and its content
 
-    "a/b/c" selects node c and its content
+    "a/b/c" selects element c and its content
 
-    "a/b/c/d" selects d nodes with content 1 and 2
+    "a/b/c/d" selects d elements with content 1 and 2
 
-    "c/d" selects d nodes with content 1 and 2
+    "c/d" selects d elements with content 1 and 2
 
-    "a/d" selects d nodes with content 3 and 4
+    "a/d" selects d elements with content 3 and 4
 
-    "d" selects d nodes with content 1,2,3, and 4
+    "d" selects d elements with content 1,2,3, and 4
 
-In other words it select the nodes matching the node path signature.
+In other words it select the elements matching the element path signature.
 
-(-> (from-string "\<a\>hello\</a\>")
-        (pull-xml "a" :xml (fn \[elem\] (println elem))))
+There are also two convenience functions for reading xml sources:
+
+    (-> (from-string "<a>hello</a>")
+            (pull-xml "a" :xml (fn [elem] (println elem))))
+
+and
+
+     (-> (from-resource "some-resource-on-classpath.xml")
+            (pull-xml "a" :xml (fn [elem] (println elem))))
 
 
 #examples
@@ -72,13 +79,13 @@ file: /home/user/xml/my.xml
       </b>
     </a>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn \[node\] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn \[elem\] (println elem)))
 
 output:
 
     <c><d>1</d><d>2</d><d>3</d><d>4</d></c>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn \[node\] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn \[elem\] (println elem)))
 
 output:
 
@@ -87,13 +94,13 @@ output:
     <d>3</d>
     <d>4</d>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn \[node\] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn \[elem\] (println elem)))
 
 output:
 
     {"c":{"d":[1,2,3,4]}}
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn \[node\] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn \[elem\] (println elem)))
 
 output:
 
@@ -103,13 +110,13 @@ output:
     {"d":4}
 
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn \[node\] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn \[elem\] (println elem)))
 
 output:
 
     {:c {:d [1 2 3 4]}}
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn \[node\] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn \[elem\] (println elem)))
 
 output:
 

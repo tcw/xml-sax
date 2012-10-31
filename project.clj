@@ -1,6 +1,6 @@
-(defproject xml-sax "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject xml-sax "0.1"
+  :description "A simple clojure xml sax parser with element selection"
+  :url "https://github.com/tcw/xml-sax"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
