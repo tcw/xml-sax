@@ -79,13 +79,13 @@ file: /home/user/xml/my.xml
       </b>
     </a>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn \[elem\] (println elem)))
+    (pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn [elem] (println elem)))
 
 output:
 
     <c><d>1</d><d>2</d><d>3</d><d>4</d></c>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn \[elem\] (println elem)))
+    (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn [elem] (println elem)))
 
 output:
 
@@ -94,13 +94,13 @@ output:
     <d>3</d>
     <d>4</d>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn \[elem\] (println elem)))
+    (pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn [elem] (println elem)))
 
 output:
 
     {"c":{"d":[1,2,3,4]}}
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn \[elem\] (println elem)))
+    (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn [elem] (println elem)))
 
 output:
 
@@ -110,13 +110,13 @@ output:
     {"d":4}
 
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn \[elem\] (println elem)))
+    (pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn [elem] (println elem)))
 
 output:
 
     {:c {:d [1 2 3 4]}}
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn \[elem\] (println elem)))
+    (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn [elem] (println elem)))
 
 output:
 
