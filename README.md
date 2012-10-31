@@ -7,14 +7,17 @@ The library provides an element matcher for easy selection of elements.
 #Install
 
 Add to dependencies
-    [xml-sax 0.1]
+
+    \[xml-sax 0.1\]
 
 #Usage
 
 add to ns:
+
     (:use xml-sax.core)
 
 usage:
+
     (pull-xml <source> <node-path> <output-format> <callback-function>)
 
 The element matcher does not match like xpath!
@@ -50,8 +53,8 @@ Then node-path
 
 In other words it select the nodes matching the node path signature.
 
-(-> (from-string "<a>hello</a>")
-        (pull-xml "a" :xml (fn [elem] (println elem))))
+(-> (from-string "\<a\>hello\</a\>")
+        (pull-xml "a" :xml (fn \[elem\] (println elem))))
 
 
 #examples
@@ -69,13 +72,13 @@ file: /home/user/xml/my.xml
       </b>
     </a>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn [node] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn \[node\] (println node)))
 
 output:
 
     <c><d>1</d><d>2</d><d>3</d><d>4</d></c>
 
-(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn [node] (println node)))
+(pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn \[node\] (println node)))
 
 output:
 
