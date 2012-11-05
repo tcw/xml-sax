@@ -10,7 +10,7 @@ This library is in alpha state!
 
 Add to dependencies
 
-    [xml-sax 0.1]
+    [xml-sax 0.1.0]
 
 #Usage
 
@@ -21,6 +21,11 @@ add to ns:
 usage:
 
     (pull-xml <source> <element-path> <output-format> <callback-function>)
+
+example:
+
+    (pull-xml "/tmp/my.xml" "item/car" :xml (fn [elem] (println elem)))
+
 
 The element matcher does not match like xpath!
 
@@ -68,7 +73,7 @@ and
 
 #examples
 
-file: /home/user/xml/my.xml
+file: /tmp/my.xml
 
     <a>
       <b>
@@ -83,7 +88,7 @@ file: /home/user/xml/my.xml
 
 function:
 
-    (pull-xml "/home/user/xml/my.xml" "a/b/c" :xml (fn [elem] (println elem)))
+    (pull-xml "/tmp/my.xml" "a/b/c" :xml (fn [elem] (println elem)))
 
 output:
 
@@ -91,7 +96,7 @@ output:
 
 function:
 
-    (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn [elem] (println elem)))
+    (pull-xml "/tmp/my.xml" "a/b/c/d" :xml (fn [elem] (println elem)))
 
 output:
 
@@ -102,7 +107,7 @@ output:
 
 function:
 
-    (pull-xml "/home/user/xml/my.xml" "a/b/c" :json (fn [elem] (println elem)))
+    (pull-xml "/tmp/my.xml" "a/b/c" :json (fn [elem] (println elem)))
 
 output:
 
@@ -110,7 +115,7 @@ output:
 
 function:
 
-    (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :json (fn [elem] (println elem)))
+    (pull-xml "/tmp/my.xml" "a/b/c/d" :json (fn [elem] (println elem)))
 
 output:
 
@@ -121,7 +126,7 @@ output:
 
 function:
 
-    (pull-xml "/home/user/xml/my.xml" "a/b/c" :clj-map (fn [elem] (println elem)))
+    (pull-xml "/tmp/my.xml" "a/b/c" :clj-map (fn [elem] (println elem)))
 
 output:
 
@@ -129,7 +134,7 @@ output:
 
 function:
 
-    (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :clj-map (fn [elem] (println elem)))
+    (pull-xml "/tmp/my.xml" "a/b/c/d" :clj-map (fn [elem] (println elem)))
 
 output:
 
