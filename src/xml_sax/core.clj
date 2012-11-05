@@ -98,7 +98,9 @@ as a clojure set with keywords"
         :xml produces xml string
         :json produces json string
         :clj-map produces clojure map
-  f -> callback-function - example: (fn [elem] (println elem)))"
+  f -> callback-function - example: (fn [elem] (println elem)))
+  example:
+  (pull-xml \"/home/user/xml/my.xml\" \"a/b/c\" :xml (fn [elem] (println elem)))"
   (cond
     (= as :xml ) (pull-xml-path source fxpath f)
     (= as :json ) (pull-xml-path source fxpath (comp f (fn [s] (XML/toJSONObject s))))

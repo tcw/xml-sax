@@ -1,4 +1,4 @@
-(defproject xml-sax "0.1"
+(defproject xml-sax "0.1.0"
   :description "A simple clojure xml sax parser with element selection"
   :url "https://github.com/tcw/xml-sax"
   :license {:name "Eclipse Public License"
