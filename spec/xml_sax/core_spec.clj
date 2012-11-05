@@ -158,23 +158,25 @@
   (with xml-file (from-resource "company.xml"))
 
   (it "should select first two item elements"
-    (let [counter (atom 0)]
+    (let [tag (atom [])]
       (-> @xml-file
-        (pull-xml "item" :xml (fn [elem] (swap! counter inc))))
-      (should= 2 @counter)))
+        (pull-xml "item" :xml (fn [elem] (swap! tag conj elem))))
+      (should= (apply str @tag)
+        "<item><items><item><windscreen>1</windscreen></item><item><tires>4</tires></item></items></item><item><item><mast>2</mast></item><item><sail>4</sail></item></item>")))
 
   (it "should select same first two item elements"
-    (let [counter (atom 0)]
+    (let [tag (atom [])]
       (-> @xml-file
-        (pull-xml "items/item" :xml (fn [elem] (swap! counter inc))))
-      (should= 2 @counter)))
+        (pull-xml "items/item" :xml (fn [elem] (swap! tag conj elem))))
+      (should= (apply str @tag)
+        "<item><items><item><windscreen>1</windscreen></item><item><tires>4</tires></item></items></item><item><item><mast>2</mast></item><item><sail>4</sail></item></item>")))
 
-  (it "should select last four item elements"
-    (let [counter (atom 0)]
+  (it "should select the two most deeply nested item elements"
+    (let [tag (atom [])]
       (-> @xml-file
-        (pull-xml "items/item" :xml (fn [elem] (swap! counter inc))))
-      (should= 2 @counter)))
-
+        (pull-xml "item/items/item" :xml (fn [elem] (swap! tag conj elem))))
+      (should= (apply str @tag)
+        "<item><windscreen>1</windscreen></item><item><tires>4</tires></item>")))
   )
 
 
