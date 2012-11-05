@@ -57,13 +57,16 @@ as a clojure set with keywords"
 (defn- pull-xml-path [source fxpath f]
   (let [path (string/split fxpath #"/")
         path-pos (atom 0)
+        rec-match (atom 0)
         path-final (- (count path) 1)
         start-elem (atom false)
         xml-elem (atom [])]
     (sax-parse source
       (fn [uri local-name q-name #^Attributes atts]
         (if @start-elem
-          (swap! xml-elem conj (tag-as-string uri local-name q-name atts))
+          (do
+            (when (is-match? path path-final q-name) (swap! rec-match inc))
+            (swap! xml-elem conj (tag-as-string uri local-name q-name atts)))
           (when (is-match? path @path-pos q-name)
             (if (= @path-pos path-final)
               (do (swap! xml-elem conj (tag-as-string uri local-name q-name atts))
@@ -72,13 +75,15 @@ as a clojure set with keywords"
         ),
       (fn [uri local-name q-name]
         (when @start-elem (swap! xml-elem conj (str "</" uri local-name q-name ">")))
-        (when (is-match? path @path-pos q-name)
-          (if @start-elem
-            (do
-              (swap! start-elem not)
-              (f (apply str @xml-elem))
-              (reset! xml-elem []))
-            (swap! path-pos dec)))
+        (if (and (< 0 @rec-match) (is-match? path path-final q-name))
+          (swap! rec-match dec)
+          (when (is-match? path @path-pos q-name)
+            (if @start-elem
+              (do
+                (swap! start-elem not)
+                (f (apply str @xml-elem))
+                (reset! xml-elem []))
+              (swap! path-pos dec))))
         ),
       (fn [ch start length]
         (when @start-elem

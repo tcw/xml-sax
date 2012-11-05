@@ -1,7 +1,7 @@
 #Description
 
 A Clojure distillation of the java xml sax parser library.
-The main goal of this library is to simplifying xml sax parsing.
+The main goal of this library is to simplify xml sax parsing.
 The library provides an element matcher for easy selection of elements.
 
 This library is in alpha state!
@@ -88,6 +88,8 @@ function:
 output:
 
     <c><d>1</d><d>2</d><d>3</d><d>4</d></c>
+
+function:
 
     (pull-xml "/home/user/xml/my.xml" "a/b/c/d" :xml (fn [elem] (println elem)))
 

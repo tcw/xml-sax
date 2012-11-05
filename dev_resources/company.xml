@@ -14,4 +14,25 @@
         <nickname>gard</nickname>
         <salary>200000</salary>
     </staff>
+    <items>
+        <item>
+            <items>
+                <item>
+                    <windscreen>1</windscreen>
+                </item>
+                <item>
+                    <tires>4</tires>
+                </item>
+            </items>
+        </item>
+        <item>
+            <item>
+                <mast>2</mast>
+            </item>
+            <item>
+                <sail>4</sail>
+            </item>
+        </item>
+    </items>
+
 </company>

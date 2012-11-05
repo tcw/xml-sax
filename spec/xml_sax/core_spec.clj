@@ -56,13 +56,13 @@
     (let [tag (atom [])]
       (-> (from-string "<e/>")
         (pull-xml "e" :json (fn [elem] (swap! tag conj elem))))
-      (should= "{\"e\":\"\"}" (apply str @tag) )))
+      (should= "{\"e\":\"\"}" (apply str @tag))))
 
   (it "should handle text"
     (let [tag (atom [])]
       (-> (from-string "<e>text</e>")
         (pull-xml "e" :json (fn [elem] (swap! tag conj elem))))
-      (should= "{\"e\":\"text\"}" (apply str @tag) )))
+      (should= "{\"e\":\"text\"}" (apply str @tag))))
 
   (it "should handle only attribute"
     (let [tag (atom [])]
@@ -92,7 +92,7 @@
     (let [tag (atom [])]
       (-> (from-string "<e> text <a>text</a> </e>")
         (pull-xml "e" :json (fn [elem] (swap! tag conj elem))))
-      (should= "{\"e\":{\"content\":\"text\",\"a\":\"text\"}}" (apply str @tag) )))
+      (should= "{\"e\":{\"content\":\"text\",\"a\":\"text\"}}" (apply str @tag))))
   )
 
 (describe "Finds matching xml element for path and converts to clojure map"
@@ -120,38 +120,60 @@
     (let [tag (atom [])]
       (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
         (pull-xml "a/b/c" :xml (fn [elem] (swap! tag conj elem))))
-      (should= "<c><d>1</d><d>2</d><d>3</d><d>4</d></c>" (apply str @tag) )))
+      (should= "<c><d>1</d><d>2</d><d>3</d><d>4</d></c>" (apply str @tag))))
 
   (it "makes sure d nodes are selected and output is xml"
     (let [tag (atom [])]
       (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
         (pull-xml "a/b/c/d" :xml (fn [elem] (swap! tag conj elem))))
-      (should= "<d>1</d><d>2</d><d>3</d><d>4</d>" (apply str @tag) )))
+      (should= "<d>1</d><d>2</d><d>3</d><d>4</d>" (apply str @tag))))
 
   (it "makes sure c node is selected and output is json"
     (let [tag (atom [])]
       (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
         (pull-xml "a/b/c" :json (fn [elem] (swap! tag conj elem))))
-      (should= "{\"c\":{\"d\":[1,2,3,4]}}" (apply str @tag) )))
+      (should= "{\"c\":{\"d\":[1,2,3,4]}}" (apply str @tag))))
 
   (it "makes sure d nodes are selected and output is json"
     (let [tag (atom [])]
       (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
         (pull-xml "a/b/c/d" :json (fn [elem] (swap! tag conj elem))))
-      (should= "{\"d\":1}{\"d\":2}{\"d\":3}{\"d\":4}" (apply str @tag) )))
+      (should= "{\"d\":1}{\"d\":2}{\"d\":3}{\"d\":4}" (apply str @tag))))
 
   (it "makes sure c node is selected and output is a clojure map"
     (let [tag (atom [])]
       (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
         (pull-xml "a/b/c" :clj-map (fn [elem] (swap! tag conj elem))))
-      (should= "{:c {:d [1 2 3 4]}}" (apply str @tag) )))
+      (should= "{:c {:d [1 2 3 4]}}" (apply str @tag))))
 
   (it "makes sure d nodes are selected and output is a clojure map"
     (let [tag (atom [])]
       (-> (from-string "<a> <b> <c> <d>1</d> <d>2</d> <d>3</d> <d>4</d> </c> </b> </a>")
         (pull-xml "a/b/c/d" :clj-map (fn [elem] (swap! tag conj elem))))
-      (should= "{:d 1}{:d 2}{:d 3}{:d 4}" (apply str @tag) )))
+      (should= "{:d 1}{:d 2}{:d 3}{:d 4}" (apply str @tag))))
+  )
 
+(describe "Repeating xml tags"
+
+  (with xml-file (from-resource "company.xml"))
+
+  (it "should select first two item elements"
+    (let [counter (atom 0)]
+      (-> @xml-file
+        (pull-xml "item" :xml (fn [elem] (swap! counter inc))))
+      (should= 2 @counter)))
+
+  (it "should select same first two item elements"
+    (let [counter (atom 0)]
+      (-> @xml-file
+        (pull-xml "items/item" :xml (fn [elem] (swap! counter inc))))
+      (should= 2 @counter)))
+
+  (it "should select last four item elements"
+    (let [counter (atom 0)]
+      (-> @xml-file
+        (pull-xml "items/item" :xml (fn [elem] (swap! counter inc))))
+      (should= 2 @counter)))
 
   )
 
